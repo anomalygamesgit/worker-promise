@@ -10,7 +10,7 @@ const DEFAULT_HANDLER = 'main';
 
 const isPromise = (o: any) => typeof o === 'object' && typeof o.then === 'function' && typeof o.catch === 'function';
 
-function RegisterPromise(fn: Function) {
+function RegisterPromise(fn?: Function) {
   const handlers = { [DEFAULT_HANDLER]: fn };
   const sendPostMessage = self.postMessage.bind(self);
 

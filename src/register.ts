@@ -17,9 +17,9 @@ function RegisterPromise(fn: Function) {
   const server = new (class WorkerRegister extends Emitter {
     emit(eventName: string, ...args: any[]) {
       if (args.length === 1 && args[0] instanceof TransferableResponse) {
-        sendPostMessage({ eventName, args }, args[0]._transferable);
+        sendPostMessage({ args, eventName }, args[0]._transferable);
       } else {
-        sendPostMessage({ eventName, args });
+        sendPostMessage({ args, eventName });
       }
       return this;
     }
@@ -106,3 +106,6 @@ class TransferableResponse {
     this._transferable = transferable;
   }
 }
+
+export { TransferableResponse };
+export default RegisterPromise;

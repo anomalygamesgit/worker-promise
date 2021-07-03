@@ -27,6 +27,12 @@ function RegisterPromise(fn: Function) {
     localEmit(eventName: string, ...args: any[]) {
       super.emit(eventName, ...args);
     }
+
+    operation(name: string, handler: any) {
+      // @ts-ignore
+      handlers[name] = handler;
+      return this;
+    }
   })();
 
   const run = (...args: any[]) => {

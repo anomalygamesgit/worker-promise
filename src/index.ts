@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+
 import Emitter from './emitter';
 
 const MESSAGE_RESULT = 0;
@@ -33,6 +34,14 @@ class WorkerPromise extends Emitter {
     return this._messages.size;
   }
 
+  exec(operationName: string, data = undefined, transferable: Transferable[], onEvent: Function) {
+    return new Promise((res, rej) => {
+      const messageId = this._messageId++;
+      this._messages.set(messageId, [res, rej, onEvent]);
+      this._worker.postMessage([messageId, data, operationName], transferable ?? []);
+    });
+  }
+
   postMessage(data: any, transferable?: Transferable[], onEvent?: Function) {
     return new Promise((res, rej) => {
       const messageId = this._messageId++;
@@ -42,7 +51,7 @@ class WorkerPromise extends Emitter {
   }
 
   emit(eventName: string, ...args: any[]) {
-    this._worker.postMessage({ eventName, args });
+    this._worker.postMessage({ args, eventName });
     return this;
   }
 
